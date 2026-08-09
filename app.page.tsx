@@ -1,17 +1,6 @@
-export default function Home() {
-  const products = [
-    { id: 1, title: "Nürburgring Full Circuit Track Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/nurburgring.png" },
-    { id: 2, title: "Spa-Francorchamps Eau Rouge Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/spa.png" },
-    { id: 3, title: "Monaco Grand Prix Circuit Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/monaco.png" },
-    { id: 4, title: "Le Mans Circuit de la Sarthe Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/lemans.png" },
-    { id: 5, title: "Silverstone GP Circuit Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/silverstone.png" },
-    { id: 6, title: "Monza Autodrome Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/monza.png" },
-    { id: 7, title: "Isle of Man TT Course Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/tt.png" },
-    { id: 8, title: "Hockenheimring Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/hockenheim.png", soldOut: true },
-    { id: 9, title: "Catalunya Circuit Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/catalunya.png" },
-    { id: 10, title: "Mugello Circuit Decal", price: "£3.99", old: "£17.99", img: "https://cdn.shopify.com/s/files/1/0623/2388/0834/files/mugello.png" },
-  ];
+import { products } from "@/lib/products";
 
+export default function Home() {
   const reviews = [
     { text: "Insane quality for the price. Ordered Monday, had them Wednesday. Looks absolutely mint.", author: "Tom B.", source: "Google" },
     { text: "The custom text sticker came out perfect. Exactly the font I wanted. Will 100% order again.", author: "CurvyKaz", source: "Facebook" },
@@ -77,21 +66,27 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
           {products.map((p) => (
-            <a key={p.id} href="#" className="group relative bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800 hover:border-red-600/50 transition-all block">
-              <span className="absolute top-2 left-2 z-10 bg-red-600 text-white text-[9px] font-extrabold uppercase tracking-[0.08em] px-2 py-1 rounded">SALE</span>
+            <a key={p.id} href={`/products/${p.handle}`} className="group relative bg-neutral-900 rounded-lg overflow-hidden border border-neutral-800 hover:border-red-600/50 transition-all block">
+              {p.badge && (
+                <span className="absolute top-2 left-2 z-10 bg-red-600 text-white text-[9px] font-extrabold uppercase tracking-[0.08em] px-2 py-1 rounded">{p.badge}</span>
+              )}
               {p.soldOut && (
                 <div className="absolute inset-0 bg-black/60 z-20 flex items-center justify-center">
                   <span className="bg-neutral-800 text-neutral-400 text-[10px] font-extrabold uppercase tracking-[0.15em] px-3 py-1 rounded">Sold Out</span>
                 </div>
               )}
               <div className="aspect-square bg-white flex items-center justify-center">
-                <img src={p.img} alt={p.title} className="w-[80%] h-[80%] object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+                <img src={p.image} alt={p.title} className="w-[80%] h-[80%] object-contain group-hover:scale-105 transition-transform duration-300" loading="lazy" />
               </div>
               <div className="p-3">
                 <h3 className="text-xs font-semibold text-neutral-300 line-clamp-2 leading-snug min-h-[32px]">{p.title}</h3>
                 <div className="mt-1.5 flex gap-2 items-baseline">
-                  <span className="text-sm font-extrabold text-red-500">{p.price}</span>
-                  <span className="text-[11px] text-neutral-600 line-through">{p.old}</span>
+                  <span className="text-sm font-extrabold text-red-500">
+                    {p.priceFrom !== p.priceTo ? `from £${p.priceFrom.toFixed(2)}` : `£${p.priceFrom.toFixed(2)}`}
+                  </span>
+                  {p.comparePriceFrom && p.comparePriceFrom > p.priceFrom && (
+                    <span className="text-[11px] text-neutral-600 line-through">£{p.comparePriceFrom.toFixed(2)}</span>
+                  )}
                 </div>
               </div>
             </a>
